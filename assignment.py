@@ -1,13 +1,24 @@
-from adapter import StreamAdapter
+import json
+class CourseWareB():
 
+    def load_raw_state(cls,raw_state):
+        """
+        答案状态在commonComponentState下的4cb5f12f9e164c6c545a55202bc818f2下的answer字段
+        数据存储形式是list
+        """
+        state = json.loads(raw_state).get("commonComponentState")
+        panel_status = []
+        if state is not None:
+            if "4cb5f12f9e164c6c545a55202bc818f2" in state:
+                panel_status = state["4cb5f12f9e164c6c545a55202bc818f2"]["answer"]
+        return panel_status
 
-class CourseWareB(StreamAdapter):
-    pass
-"""
-在下面定义CourseWareB
-答案状态在commonComponentState下的4cb5f12f9e164c6c545a55202bc818f2下的answer字段
-正确答案是1，2，0，3
-"""
+    def is_user_right(cls,stream):
+        """
+        正确答案是1，2，0，3
+        """
+        right_ans = [1, 2, 0, 3]
+        return stream == right_ans
 
 if __name__ == "__main__":
     """
