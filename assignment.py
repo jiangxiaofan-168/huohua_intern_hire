@@ -24,4 +24,14 @@ if __name__ == "__main__":
     """
     在这里处理日志输出，输出结果为result.csv，三个字段为：学生ID，状态，是否为正确状态
     """
-    pass
+    import pandas as pd
+    with open('data.csv', 'r') as file:
+        data = [line.split() for line in file]
+    uid = [line[0] for line in data[1:]]
+    states = [line[3] for line in data[1:]]
+    ans = []
+    for state in states:
+        ans.append(CourseWareB().is_user_right(CourseWareB().load_raw_state(state)))
+    states = [json.dumps(json.loads(line[3]).get("commonComponentState").get('4cb5f12f9e164c6c545a55202bc818f2')) for line in data[1:]]
+    dataframe = pd.DataFrame({'uid':uid,'state':states,'if_state_true':ans})
+    dataframe.to_csv("result.csv",index = False,sep = ',')
